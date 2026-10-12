@@ -1,0 +1,30 @@
+{
+  "years": 35,
+  "valid_cell_diagnostics": 46874,
+  "cell_residual_lag1_quantiles": {
+    "p05": -0.25925206542303475,
+    "median": -0.002467557937611556,
+    "p95": 0.26959322958381116
+  },
+  "interpretation": "Descriptive residual diagnostic only; trend p-values are not serial-correlation adjusted.",
+  "regional_diagnostics": [
+    {
+      "region": "study_box",
+      "years": 35,
+      "residual_lag1_correlation": 0.3127533891235034,
+      "durbin_watson": 1.3388009820759288
+    },
+    {
+      "region": "north",
+      "years": 35,
+      "residual_lag1_correlation": 0.03453615502578379,
+      "durbin_watson": 1.9147044010288765
+    },
+    {
+      "region": "south",
+      "years": 35,
+      "residual_lag1_correlation": 0.17003037364944054,
+      "durbin_watson": 1.612946799310847
+    }
+  ]
+}

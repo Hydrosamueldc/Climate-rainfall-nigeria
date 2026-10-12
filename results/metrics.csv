@@ -1,0 +1,5 @@
+model,MAE,RMSE,skill_vs_baseline
+baseline,32.793,48.286,0.0
+persistence,32.368,42.651,0.22
+linear_lag1,30.812,45.74,0.103
+linear_trend,38.769,49.703,-0.06

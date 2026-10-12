@@ -1,0 +1,42 @@
+{
+  "forecast_years": 15,
+  "forecast_predictions_verified": true,
+  "forecast_metrics_verified": true,
+  "hac_library_cross_checks": 36,
+  "method": "Newey-West HAC, Bartlett kernel, lags 1/3/5, n/(n-2) correction, approximate t(n-2) inference; BH q=0.05 separately per method.",
+  "limitations": "Sensitivity analysis, not definitive inference. Small sample, bandwidth choice, temporal model and spatial dependence remain limitations. HAC may increase or decrease standard errors.",
+  "trend_comparison": [
+    {
+      "method": "OLS",
+      "valid_cells": 46874,
+      "raw_p_below_005_fraction": 0.3038998165294193,
+      "bh_fdr_selected_fraction": 0.11582113751760037,
+      "selected_by_both_ols_and_method_fraction": 0.11582113751760037,
+      "selection_changed_from_ols_fraction": 0.0
+    },
+    {
+      "method": "HAC_lag1",
+      "valid_cells": 46874,
+      "raw_p_below_005_fraction": 0.324124247983957,
+      "bh_fdr_selected_fraction": 0.1572300209071127,
+      "selected_by_both_ols_and_method_fraction": 0.11232239621111917,
+      "selection_changed_from_ols_fraction": 0.04840636600247472
+    },
+    {
+      "method": "HAC_lag3",
+      "valid_cells": 46874,
+      "raw_p_below_005_fraction": 0.3704185689294705,
+      "bh_fdr_selected_fraction": 0.20625506677475786,
+      "selected_by_both_ols_and_method_fraction": 0.11234372999957333,
+      "selection_changed_from_ols_fraction": 0.0973887442932116
+    },
+    {
+      "method": "HAC_lag5",
+      "valid_cells": 46874,
+      "raw_p_below_005_fraction": 0.3906856679609165,
+      "bh_fdr_selected_fraction": 0.2338823228228869,
+      "selected_by_both_ols_and_method_fraction": 0.11029568630797457,
+      "selection_changed_from_ols_fraction": 0.1291120877245381
+    }
+  ]
+}

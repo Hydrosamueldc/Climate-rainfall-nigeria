@@ -1,0 +1,21 @@
+{
+  "file": "data\\chirps_nigeria.nc",
+  "bytes": 60338949,
+  "sha256": "8b2af33558cd60d9fb6789ae7a4dd7a26f7d49db52d8d20371f1fad3922fa97d",
+  "source": "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/netcdf/chirps-v2.0.monthly.nc",
+  "product": "CHIRPS v2.0 monthly, 0.05 degree",
+  "period": [
+    "1991-01-01",
+    "2025-12-01"
+  ],
+  "bounds": {
+    "latitude": [
+      4.0,
+      14.0
+    ],
+    "longitude": [
+      2.5,
+      15.0
+    ]
+  }
+}

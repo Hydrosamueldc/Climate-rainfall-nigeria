@@ -1,0 +1,15 @@
+# data files are large and can be re-downloaded by the notebook
+*.nc
+data/*
+!data/.gitkeep
+
+# python and notebook clutter
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+venv/
+climate/
+.DS_Store
+*.log
+.env
+.env.*

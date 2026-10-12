@@ -1,0 +1,27 @@
+{
+  "total_cells": 50000,
+  "valid_cells": 46874,
+  "permanently_missing_cells": 3126,
+  "intermittently_missing_cells": 0,
+  "regions": [
+    {
+      "region": "study_box",
+      "valid_cells": 46874,
+      "available_area_fraction": 0.9368615896672876,
+      "maximum_monthly_mean_difference_mm": 0.000443974314521256
+    },
+    {
+      "region": "north",
+      "valid_cells": 25000,
+      "available_area_fraction": 1.0,
+      "maximum_monthly_mean_difference_mm": 0.0003517744011105606
+    },
+    {
+      "region": "south",
+      "valid_cells": 21874,
+      "available_area_fraction": 0.8745904131771962,
+      "maximum_monthly_mean_difference_mm": 0.0003285561676875659
+    }
+  ],
+  "scope": "Rectangular study area; no Nigeria boundary mask. Missing coverage is not classified as land or ocean."
+}

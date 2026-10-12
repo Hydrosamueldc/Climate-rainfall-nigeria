@@ -1,0 +1,29 @@
+{
+  "scope": "Nigeria study box (includes neighbouring countries)",
+  "period": [
+    "1991-01-01",
+    "2025-12-01"
+  ],
+  "mean_seasonal_rainfall_mm": 849.5511474609375,
+  "peak_calendar_month": 8,
+  "north_mean_seasonal_mm": 684.8231811523438,
+  "south_mean_seasonal_mm": 1035.3114013671875,
+  "north_peak_month": 8,
+  "south_peak_month": 9,
+  "valid_cells": 46874,
+  "partly_missing_cells": 0,
+  "trend": {
+    "wetter_fraction": 0.4298545035627427,
+    "drier_fraction": 0.5701454964372573,
+    "fdr_selected_fraction": 0.11582113751760037,
+    "mean_trend_mm_per_decade": -7.37463360338339
+  },
+  "best_historical_model": "persistence",
+  "forecast_metrics": {
+    "MAE": 32.368,
+    "RMSE": 42.651,
+    "skill_vs_baseline": 0.22
+  },
+  "test_years": 15,
+  "note": "Historical evaluation only; no future forecast is issued."
+}
