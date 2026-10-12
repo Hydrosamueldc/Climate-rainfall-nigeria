@@ -23,6 +23,8 @@ The main task is understanding historical rainfall. Forecasting is a secondary e
 
 **The study area includes neighbouring countries.** No Nigeria boundary mask is applied, so spatial averages describe the study box, not Nigeria-only national rainfall. North and south refer to portions of this box divided at 9°N.
 
+The regional analysis focuses on north–south differences, with the study area divided at 9°N. Although the spatial maps also show east–west variation, separate eastern and western averages were not calculated because they fall outside the current scope of the analysis. Future work could investigate these differences using clearly defined longitude-based regions.
+
 CHIRPS blends satellite information and rain-gauge observations. See the [CHIRPS project page](https://www.chc.ucsb.edu/data/chirps). Data were downloaded from the [original UCSB monthly netCDF source](https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/netcdf/), using partial reads of compressed blocks intersecting the study area. The notebook uses this same UCSB source when the local dataset is absent.
 
 **Spatial averaging:** regional means use weights proportional to `cos(latitude)`, accounting for the latitude-dependent areas of cells on this regular grid. Permanently missing cells are excluded and weights are renormalized over available cells.
