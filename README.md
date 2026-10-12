@@ -2,8 +2,6 @@
 
 An exploratory analysis of CHIRPS monthly rainfall in a rectangular study area around Nigeria. The local dataset covers **1991–2025**. The project describes June–September rainfall patterns and trends, then tests four simple methods for predicting seasonal totals from earlier observations.
 
-**Validated run:** the notebook and exported results use January 1991–December 2025. All code cells completed successfully, including calendar, coverage and historical forecast checks.
-
 ## Research question
 
 > How has June–September rainfall varied across the study area, where are trends apparent, and how accurately can simple methods predict seasonal totals using earlier years?
@@ -31,7 +29,7 @@ CHIRPS blends satellite information and rain-gauge observations. See the [CHIRPS
 
 **Season choice:** June–September provides a fixed window for comparing the northern main rainy season across years. The monthly climatology helps assess this choice. Southern rainfall extends outside this window, so the seasonal comparisons do not represent each region's full rainy season.
 
-The large `.nc` file is excluded from Git. The completed source, bounds and checksum are in `results/data_manifest.json`.
+The large `.nc` file is excluded from Git. Its source, bounds and checksum are recorded in `results/data_manifest.json`.
 
 ## Workflow
 
@@ -47,7 +45,7 @@ The workflow requires a complete, unique monthly calendar and all four months fo
 
 **Dask demonstration:** the notebook checks numerical agreement between chunked and in-memory trend calculations. Local timings include different loading and scheduling costs; they are not a controlled benchmark or evidence that the full workflow scales efficiently.
 
-**Coverage verification:** run `python verify_spatial_weights.py` after obtaining the data. It checks regular grid spacing, constant coverage, normalized weights, exclusion of missing cells, and agreement with spherical cell-area weighted monthly means within 0.001 mm. Results are in `results/spatial_weighting_checks.json`. The verified box has 46,874 valid cells out of 50,000, no intermittently missing cells, and 93.7% available area. The largest difference in monthly means is below 0.0005 mm. This is study-box coverage, not Nigeria-only coverage.
+**Coverage verification:** `verify_spatial_weights.py` checks regular grid spacing, constant coverage, normalized weights, exclusion of missing cells, and agreement with spherical cell-area weighted monthly means within 0.001 mm. Results are in `results/spatial_weighting_checks.json`. The box has 46,874 valid cells out of 50,000, no intermittently missing cells, and 93.7% available area. The largest difference in monthly means is below 0.0005 mm. This is study-box coverage, not Nigeria-only coverage.
 
 ## How forecasting works
 
@@ -67,17 +65,17 @@ The exported table contains **15 comparisons, from 2011 through 2025**:
 | Lag regression | Learn the relationship between successive years |
 | Trend regression | Fit rainfall against year and extend the line |
 
-The year being predicted must never enter its own model fitting. Full-period climatology is descriptive and must not reveal future observations through forecast features.
+Each model is fitted using observations from before its target year. Full-period climatology is used for descriptive analysis, not as a forecast feature.
 
 **Training data:** the historical-mean baseline uses every available earlier season, starting in 1991. Both regressions use a shared lag-feature table whose target years start in 1992; 1991 supplies the first previous-year value.
 
-This is retrospective forecasting: the historical years already happened, but each prediction uses only earlier information. There is no separate 2025 evaluation script and no issued 2026 forecast.
+This is retrospective forecasting: each historical prediction uses only earlier information. The evaluation includes 2025 within the same walk-forward procedure. No future forecast is issued.
 
 ## Results and visualizations
 
 ### Normal rainfall patterns
 
-The completed 1991–2025 summary gives a mean June–September total of **849.6 mm**, with northern and southern averages of **684.8 mm** and **1035.3 mm**. Monthly climatology peaks in August for the whole box and north, and September for the south.
+Mean June–September rainfall over 1991–2025 is **849.6 mm**, with northern and southern averages of **684.8 mm** and **1035.3 mm**. Monthly climatology peaks in August for the whole box and north, and September for the south.
 
 ![Monthly rainfall climatology for the study box, north and south](figures/04_climatology_north_south.png)
 
@@ -89,7 +87,7 @@ The completed 1991–2025 summary gives a mean June–September total of **849.6
 
 ### Historical forecast evaluation
 
-The current CSV exports report:
+Forecast errors for 2011–2025 are:
 
 | Method | MAE (mm) | RMSE (mm) | Skill against baseline |
 |---|---:|---:|---:|
@@ -102,7 +100,7 @@ Persistence has the lowest RMSE; lag regression has the lowest MAE. Positive ski
 
 ![Historical rainfall predictions compared with observations](figures/10_forecast_vs_actual.png)
 
-*Predicted seasonal rainfall compared with actual observations. Each prediction must use earlier years only.*
+*Predicted seasonal rainfall compared with actual observations. Each prediction uses earlier years only.*
 
 The 2025 comparison is included in the same forecast table. The trend method was closest in that particular year, while persistence performed best by RMSE across the whole period. One good year does not establish reliable forecasting skill.
 
@@ -116,7 +114,7 @@ The mean slope is **−7.4 mm per decade**, with 43.0% of valid cells showing po
 
 **Autocorrelation check:** the notebook removes each fitted linear trend and checks correlation between consecutive annual residuals. It exports grid-cell correlation quantiles and regional lag-one correlations and Durbin–Watson statistics. These are descriptive diagnostics, not corrected trend tests. Low lag-one correlation cannot establish independence at every lag. FDR handles multiple testing, not serial correlation; the trend maps remain exploratory. The separate HAC sensitivity analysis below investigates dependence-aware uncertainty without replacing the OLS map. See the [regression diagnostics guide](https://www.statsmodels.org/dev/diagnostic.html).
 
-The completed residual check gives lag-one correlations of **0.313** for the study box, **0.035** for the north and **0.170** for the south. Across grid cells, the median is **-0.002**, with the 5th–95th percentiles spanning **-0.259 to 0.270**. These values do not constitute a formal independence test or a correction to the trend p-values.
+Residual lag-one correlations are **0.313** for the study box, **0.035** for the north and **0.170** for the south. Across grid cells, the median is **-0.002**, with the 5th–95th percentiles spanning **-0.259 to 0.270**. These values do not constitute a formal independence test or a correction to the trend p-values.
 
 **No climate-change attribution:** these trends describe the observed rainfall record. This analysis does not establish whether human-caused climate change, natural variability or other drivers caused them.
 
@@ -137,11 +135,7 @@ HAC can increase or decrease estimated uncertainty. The differences show sensiti
 
 ## Run the project
 
-The tested environments use **Python 3.13.9 on Windows**: the existing Anaconda environment and a fresh isolated `.venv` created from its Python interpreter. Exact core package versions are recorded in `requirements.txt` and `results/environment.json`. The runner explicitly launches its notebook kernel with the same Python interpreter used to start the script.
-
-If these files are already open in VS Code, reload changes from disk before saving to avoid overwriting the completed run with an older editor copy.
-
-**Fresh-environment verification passed (12 October 2026).** Dependencies installed successfully into `.venv` with system packages disabled, `pip check` reported no broken requirements, and `run_analysis.py` completed the notebook and integrated verification checks using `.venv\Scripts\python.exe`. Outputs were saved successfully. This test reused the existing local CHIRPS dataset; downloading the dataset again was not tested.
+Tested with **Python 3.13.9 on Windows**, including an isolated virtual environment. Core package versions are pinned in `requirements.txt` and recorded in `results/environment.json`. The fresh-environment test covers dependency installation and the complete analysis using the local CHIRPS dataset; it does not cover downloading the dataset again.
 
 For a fresh environment, open a terminal in this folder and install the recorded core versions:
 
@@ -149,25 +143,20 @@ For a fresh environment, open a terminal in this folder and install the recorded
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+python -m pip check
 ```
 
 On macOS or Linux, activate with `source .venv/bin/activate`.
 
-Open `nigeria_rainfall_analysis.ipynb`, click **Select Kernel**, select the environment containing the dependencies and run cells from the top. Alternatively, execute and save notebook outputs, then verify spatial weighting:
+Open `nigeria_rainfall_analysis.ipynb`, select the virtual environment as its kernel and run all cells. Alternatively, execute the notebook and save its outputs from the terminal:
 
 ```powershell
 python run_analysis.py
-python verify_spatial_weights.py
 ```
 
-For the existing Anaconda installation when `python` is not on PATH:
+The runner uses the Python interpreter that launches it. Successful execution ends with `Notebook execution completed and outputs saved.` If a cell fails, the runner retains the notebook state and traceback and exits with an error; a saved notebook alone does not indicate success.
 
-```powershell
-& "$env:USERPROFILE\anaconda3\python.exe" -m pip install -r requirements.txt
-& "$env:USERPROFILE\anaconda3\python.exe" run_analysis.py
-```
-
-You can also run `jupyter lab`. The standalone downloader currently requests 1991–2025. The notebook validates and reuses the local file when it is present.
+JupyterLab is available with `jupyter lab`. The downloader requests 1991–2025. The notebook downloads the data if absent, or validates and reuses the local file when present.
 
 ## Verification scripts
 
@@ -176,7 +165,7 @@ The notebook's final cell runs both verification scripts automatically:
 - `verify_analysis.py` independently reconstructs historical predictions, checks MAE/RMSE/skill, and runs the OLS-versus-HAC trend sensitivity comparison. It uses statsmodels to cross-check the vectorized calculations.
 - `verify_spatial_weights.py` checks grid spacing, missing-cell coverage, normalized area weights and agreement with spherical cell-area averages.
 
-These scripts are part of the analysis and should stay in the repository. `requirements.txt` is the single installation file, pinned to the core versions used in the successful runs. `results/environment.json` records those versions as analysis metadata; it is not another installation file. These core pins do not lock every indirect dependency or guarantee compatibility on other systems.
+Both scripts are required by the notebook's final cell and can also run independently. `requirements.txt` pins the core dependencies, while `results/environment.json` records the execution environment. Indirect dependencies are not fully locked, and compatibility on other systems may vary.
 
 ## Files and outputs
 
@@ -247,15 +236,10 @@ As checked on 11 October 2026, the live UCSB monthly file ended in August 2026. 
 
 ## Learning resource
 
-Watch [Xarray for Scalable Scientific Data Analysis — SciPy 2020](https://www.youtube.com/watch?v=mecN-Ph_-78), by Hamman, Abernathey, Cherian and Hoyer. It introduces the data-handling tools behind the project and assumes some Python/NumPy/pandas knowledge. It is not a walkthrough of this exact project or all its statistics. Use the [official Xarray tutorials](https://tutorial.xarray.dev/) alongside it.
+[Xarray for Scalable Scientific Data Analysis — SciPy 2020](https://www.youtube.com/watch?v=mecN-Ph_-78), by Hamman, Abernathey, Cherian and Hoyer, introduces the data-handling tools used here and assumes some Python/NumPy/pandas knowledge. The [official Xarray tutorials](https://tutorial.xarray.dev/) provide additional examples.
 
 ## Credits
 
 - **Data:** Funk, C. et al. (2015). *The climate hazards infrared precipitation with stations, a new environmental record for monitoring extremes.* Scientific Data 2, 150066. CHIRPS is produced by the UC Santa Barbara Climate Hazards Center.
 - **Author:** Samuel Adegboyega. [GitHub](https://github.com/Hydrosamueldc) · [LinkedIn](https://www.linkedin.com/in/adegboyega-samuel-1a302b203).
 
-## Publishing on GitHub
-
-Include the Python scripts, notebook, README, requirements, `.gitignore`, exported figures and result files. The rainfall NetCDF file, caches, local environments, logs and `.env` files are excluded by `.gitignore`.
-
-The execution script saves notebook state even if execution fails, to retain the traceback. A saved notebook alone does not indicate success: check the terminal exit status and the completion message, and inspect any cell errors.
